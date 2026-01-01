@@ -31,14 +31,15 @@ export default function RootLayout({
             <div className="flex flex-auto min-w-0">
                 {/* <div className="sidebar min-w-72.5"></div> */}
                 <div className="flex flex-col flex-auto min-h-screen min-w-0 relative w-full">
-                    <header className="header sticky top-0 z-20 flex w-full shadow-sm dark:shadow-2xl bg-zinc-950">
+                    <header className="header sticky top-0 z-20 flex w-full shadow-sm dark:shadow-2xl bg-black border-b border-zinc-900">
                         <div className="flex items-center px-6" style={{ height: HEADER_HEIGHT }}>
-                            <Link href="/dashboard" className="hover:text-gray-300 mr-4">
-                            Dashboard
-                            </Link>
-                            <Link href="/dashboard/analytics" className="hover:text-gray-300 mr-4">
-                            Analytics
-                            </Link>
+                          <h1 className="text-xl font-semibold text-zinc-100 mr-8">SpaceX</h1>
+                          <Link href="/dashboard" className="hover:text-gray-300 mr-4">
+                          Dashboard
+                          </Link>
+                          <Link href="/dashboard/analytics" className="hover:text-gray-300 mr-4">
+                          Analytics
+                          </Link>
                         </div>
                     </header>
                     <div className="h-full flex flex-auto flex-col">

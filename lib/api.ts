@@ -29,14 +29,40 @@ export async function getLaunchHistory(): Promise<LaunchHeatmapItem[]> {
   const body = {
     query: { upcoming: false },
     options: {
-      select: ['date_utc', 'success', 'upcoming', 'id'],
+      select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id'],
       pagination: false, // Danger: fetches all (~200+ items). Fine for text data.
-      // sort: { date_utc: 'asc' }
+      sort: { date_utc: 'asc' }
     }
   };
 
   const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
   return data.docs;
+}
+
+export async function getLatestLaunch() {
+  const body = {
+    query: { upcoming: false, success: { $ne: null } },
+    options: {
+      limit: 1,
+      sort: { date_utc: 'desc' }, // Descending to get the newest one
+      select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id']
+    }
+  };
+  const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
+  return data.docs[0];
+}
+
+export async function getNextLaunch() {
+  const body = {
+    query: { upcoming: true },
+    options: {
+      limit: 1,
+      sort: { date_utc: 'asc' }, // Ascending to get the one closest to today
+      select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id']
+    }
+  };
+  const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
+  return data.docs[0];
 }
 
 export async function getPayloadStats(): Promise<PayloadStats[]> {

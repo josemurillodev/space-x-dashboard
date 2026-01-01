@@ -3,6 +3,9 @@ export interface LaunchHeatmapItem {
   date_utc: string;
   success: boolean | null;
   upcoming: boolean;
+  name: string;
+  flight_number: number;
+  details: string | null;
 }
 
 export interface PayloadStats {
@@ -39,7 +42,7 @@ export interface QueryResponse<T> {
 
 export interface QueryOptions {
   select?: string | string[] | Record<string, number>;
-  sort?: string | Record<string, 'asc' | 'desc' | 1 | -1>;
+  sort?: string | Record<string, 'asc' | 'desc' | 1 | -1> | { date_utc: string; };
   offset?: number;
   page?: number;
   limit?: number;
