@@ -26,10 +26,14 @@ export interface StarlinkSatellite {
   id: string;
   spaceTrack: {
     OBJECT_NAME: string;
+    NORAD_CAT_ID: number;
+    OBJECT_TYPE: string;
   };
   latitude: number | null;
   longitude: number | null;
   height_km: number | null;
+  version: string;
+  launch: string | null;  
 }
 
 export interface QueryResponse<T> {
