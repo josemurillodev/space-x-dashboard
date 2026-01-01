@@ -12,6 +12,8 @@ import { aggregateRocketLaunches } from '@/lib/transformers';
 import RocketsChart from '@/components/rockets-chart';
 import LaunchFocusCard from '@/components/launch-focus-card';
 
+// TODO: add launches/payloads table, rocket/launch info, add animations, add empty states
+
 export default async function DashboardPage() {
   // Parallel Data Fetching
   const [

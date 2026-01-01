@@ -1,4 +1,3 @@
-// starlink/page.tsx
 import StarlinkVisualizer from '@/components/starlink-visualizer';
 import { getStarlinkPositions } from '@/lib/api';
 

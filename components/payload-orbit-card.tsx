@@ -4,9 +4,6 @@ import { useMemo } from "react";
 import { PayloadStats } from "@/types/spacex";
 import { getProcessedPayloads } from "@/lib/payload-utils";
 
-// const colors = ["#B93F32", "#E39D23", "#22B565", "#218FA0"];
-// const radius = 80;
-
 const REGIME_CONFIG: Record<string, { color: string; distance: number; label: string; stroke: string }> = {
   vleo: { color: "border-blue-400", stroke: "stroke-blue-400", distance: 1, label: "Very Low Earth" },
   leo: { color: "border-purple-400", stroke: "stroke-purple-400", distance: 2, label: "Low Earth" },
@@ -39,8 +36,6 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
           </div>
 
           {Object.entries(REGIME_CONFIG).map(([key, config]) => {
-            // const count = stats.counts[key] || 0;
-            // const opacity = count > 0 ? "opacity-100" : "opacity-20";
             const scale = 50 + config.distance * 35; // Logic for ring spacing
 
             return (
@@ -58,35 +53,6 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
             );
           })}
         </div>
-
-        {/* <div className="relative w-64 h-64 flex items-end justify-center">
-          <svg
-            className="w-full h-64 -rotate-180 absolute bottom-0"
-            viewBox="0 0 200 200"
-          >
-            {regimes.slice(0, 4).reverse().map((regime, i) => {
-              const r = radius - i * 16;
-              // const circ = 2 * Math.PI * r;
-              // const percent = (regime.count / data.length);
-              console.log('REGIME_CONFIG[regime.name]', regime, REGIME_CONFIG[regime.label]);
-              const color = REGIME_CONFIG[regime.label].stroke;
-
-              return (
-                <circle
-                  key={regime.name}
-                  cx="100"
-                  cy="100"
-                  r={r}
-                  fill="none"
-                  // stroke={colors[i]}
-                  strokeWidth="2"
-                  className={`transition-all duration-1000 ease-out ${color}`}
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </div> */}
 
         <div className="flex-1 w-full space-y-4 font-mono">
           <div className="flex gap-4">

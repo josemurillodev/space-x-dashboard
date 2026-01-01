@@ -109,7 +109,6 @@ function Satellites({ data, onSelect, selectedSat }: SatellitesProps) {
 
 export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[] }) {
   const [selectedSat, setSelectedSat] = useState<StarlinkSatellite | null>(null);
-  console.log('selectedSat', selectedSat);
 
   return (
     <div className="h-full w-full rounded-lg border border-zinc-900 relative flex">
