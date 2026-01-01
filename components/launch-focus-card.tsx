@@ -11,10 +11,10 @@ export default function LaunchFocusCard({ latest, next }: FocusProps) {
   return (
     <div className="bg-black p-8 flex flex-col rounded-xl border border-zinc-900 relative overflow-hidden group">
       <h2 className="text-xl font-mono tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
-        Launch Focus
+        News
       </h2>
-      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-tighter mb-8">
-        Latest news
+      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-8">
+        On the Launchpad
       </p>
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 border border-zinc-800">
         
@@ -23,7 +23,7 @@ export default function LaunchFocusCard({ latest, next }: FocusProps) {
           <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-green-500/40" />
 
           <div className="some">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
               <span className="text-[11px] text-green-500 uppercase tracking-[0.3em]">Latest Mission Log</span>
             </div>
@@ -41,7 +41,7 @@ export default function LaunchFocusCard({ latest, next }: FocusProps) {
               </div>
             </div>
 
-            <div className="p-4 border border-green-500/20 bg-green-500/5 mb-4">
+            <div className="px-4 py-2 border border-green-500/20 bg-green-500/5 mb-6">
               <div className="flex flex-col justify-between text-[11px]">
                 <span className="text-green-500/60 uppercase">Timestamp</span>
                 <span className="text-green-400">{new Date(latest?.date_utc).toLocaleString()}</span>
@@ -61,7 +61,7 @@ export default function LaunchFocusCard({ latest, next }: FocusProps) {
           <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-cyan-500/40" />
 
           <div className="some">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-1 bg-cyan-500 rounded-full shadow-[0_0_8px_#06b6d4]" />
               <span className="text-[11px] text-cyan-500 uppercase tracking-[0.3em]">Next Launch Window</span>
             </div>
@@ -79,7 +79,7 @@ export default function LaunchFocusCard({ latest, next }: FocusProps) {
               </div>
             </div>
 
-            <div className="mt-4 p-4 border border-cyan-500/20 bg-cyan-500/5">
+            <div className="mt-4 px-4 py-2 border border-cyan-500/20 bg-cyan-500/5">
               <div className="flex flex-col justify-between text-[11px]">
                 <span className="text-cyan-500/60 uppercase">Timestamp</span>
                 <span className="text-cyan-400">{new Date(next?.date_utc).toLocaleString()}</span>

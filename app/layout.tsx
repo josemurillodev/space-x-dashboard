@@ -34,11 +34,11 @@ export default function RootLayout({
                     <header className="header sticky top-0 z-20 flex w-full shadow-sm dark:shadow-2xl bg-black border-b border-zinc-900">
                         <div className="flex items-center px-6" style={{ height: HEADER_HEIGHT }}>
                           <h1 className="text-xl font-semibold text-zinc-100 mr-8">SpaceX</h1>
-                          <Link href="/dashboard" className="hover:text-gray-300 mr-4">
+                          <Link href="/" className="hover:text-gray-300 mr-4">
                           Dashboard
                           </Link>
-                          <Link href="/dashboard/analytics" className="hover:text-gray-300 mr-4">
-                          Analytics
+                          <Link href="/starlink" className="hover:text-gray-300 mr-4">
+                          Starlink
                           </Link>
                         </div>
                     </header>

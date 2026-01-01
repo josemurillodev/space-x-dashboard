@@ -28,7 +28,7 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
       <h2 className="text-xl font-mono tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
         Payloads
       </h2>
-      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-tighter mb-8">
+      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-8">
         Orbital Load Distribution
       </p>
 
