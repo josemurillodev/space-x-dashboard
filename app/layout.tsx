@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`app ${geistMono.variable} ${geistMono.className} antialiased`}
       >
-        <div className="dashboard flex flex-auto flex-col bg-background">
+        <div className="dashboard flex flex-auto flex-col bg-zinc-950">
           <div className="flex flex-auto min-w-0">
             {/* <div className="sidebar min-w-72.5"></div> */}
             <div className="flex flex-col flex-auto min-h-screen min-w-0 relative w-full">
@@ -37,10 +37,10 @@ export default function RootLayout({
                   <h1 className="text-xl font-semibold text-zinc-100 mr-8">
                     SpaceX
                   </h1>
-                  <Link href="/" className="hover:text-gray-300 mr-4">
+                  <Link href="/" className="text-zinc-100 hover:text-gray-300 mr-4">
                     Dashboard
                   </Link>
-                  <Link href="/starlink" className="hover:text-gray-300 mr-4">
+                  <Link href="/starlink" className="text-zinc-100 hover:text-gray-300 mr-4">
                     Starlink
                   </Link>
                 </div>

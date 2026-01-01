@@ -1,5 +1,7 @@
 "use client";
 
+import { RocketInfo } from "@/types/spacex";
+
 const ROCKETS_COLORS = [
   { text: "text-cyan-400", border: "border-cyan-400" },
   { text: "text-blue-500", border: "border-blue-500" },
@@ -8,11 +10,8 @@ const ROCKETS_COLORS = [
   { text: "text-zinc-500", border: "border-zinc-500" },
 ];
 
-export default function RocketsChart({ data }: { data: {
-    name: string;
-    count: number;
-}[] }) {
-  const maxCount = Math.max(...data.map(o => o.count)) + 100;
+export default function RocketsChart({ data }: { data: Array<RocketInfo & { count: number }> }) {
+  const maxCount = Math.max(...data.map(o => o.count ?? 0)) + 100;
 
   return (
     <div className="flex flex-col bg-black p-8 rounded-xl border border-zinc-900 relative overflow-hidden group">
@@ -25,7 +24,7 @@ export default function RocketsChart({ data }: { data: {
       </p>
 
       <div className="flex flex-col flex-1 justify-around items-center">
-        {data.map(({ name, count }, i) => {
+        {data.map(({ name, count, success_rate_pct, mass }, i) => {
           const percentage = (count / maxCount) * 100;
 
           return (
@@ -50,6 +49,15 @@ export default function RocketsChart({ data }: { data: {
                 >
                   <div className="absolute bg-zinc-50 w-0.5 -right-0.5 -bottom-0.5 -top-0.5" />
                 </div>
+              </div>
+
+              <div className="flex justify-between items-end mt-1 px-1">
+                <span className="text-xs font-mono uppercase tracking-widest text-zinc-500">
+                  Success: {success_rate_pct.toFixed(2)}%
+                </span>
+                <span className="text-sm font-mono text-zinc-500">
+                  {mass.kg.toFixed(2)} kg
+                </span>
               </div>
             </div>
           );

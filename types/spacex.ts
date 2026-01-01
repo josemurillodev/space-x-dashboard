@@ -20,6 +20,20 @@ export interface RocketInfo {
   id: string;
   name: string;
   type: string;
+  description: string;
+  success_rate_pct: number;
+  height: {
+    meters: number;
+    feet: number;
+  };
+  diameter: {
+    meters: number;
+    feet: number;
+  };
+  mass: {
+    kg: number;
+    lb: number;
+  };
 }
 
 export interface StarlinkSatellite {

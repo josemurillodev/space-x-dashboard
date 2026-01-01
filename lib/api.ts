@@ -83,11 +83,18 @@ export async function getRockets(): Promise<RocketInfo[]> {
   if (!res.ok) throw new Error('Failed to fetch rockets');
 
   const data = await res.json();
+
+  console.log('data', data);
   
   return data.map((r: RocketInfo) => ({
     id: r.id,
     name: r.name,
-    type: r.type
+    type: r.type,
+    description: r.description,
+    success_rate_pct: r.success_rate_pct,
+    height: r.height,
+    diameter: r.diameter,
+    mass: r.mass,
   }));
 }
 

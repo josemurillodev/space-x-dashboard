@@ -18,7 +18,7 @@ export default function LaunchYearGrid({ data }: { data: LaunchHeatmapItem[] }) 
         </p>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-4">
         {years.map((year) => {
           const count = counts[year];
           const percentage = (count / chartMax) * 100;
@@ -35,7 +35,7 @@ export default function LaunchYearGrid({ data }: { data: LaunchHeatmapItem[] }) 
                   {year}
                 </span>
                 
-                <div className="absolute -top-4 left-0 text-[10px] font-mono text-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute -top-4 left-0 text-[10px] font-mono text-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   ID_{year}_STAT
                 </div>
               </div>

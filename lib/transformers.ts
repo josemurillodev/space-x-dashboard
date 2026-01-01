@@ -39,7 +39,7 @@ export function aggregateRocketLaunches(
   });
 
   return rockets.map(r => ({
-    name: r.name,
-    count: counts[r.id]
-  }));
+    ...r,
+    count: counts[r.id],
+  })) as Array<RocketInfo & { count: number }>;
 }
