@@ -10,9 +10,10 @@ import { StarlinkSatellite } from "@/types/spacex";
 interface SatellitesProps {
   data: StarlinkSatellite[];
   onSelect: (sat: StarlinkSatellite | null) => void;
+  selectedSat: StarlinkSatellite | null;
 }
 
-function Satellites({ data, onSelect }: SatellitesProps) {
+function Satellites({ data, onSelect, selectedSat }: SatellitesProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
   const meshRef2 = useRef<THREE.InstancedMesh>(null!);
   const EARTH_RADIUS = 5;
@@ -41,7 +42,7 @@ function Satellites({ data, onSelect }: SatellitesProps) {
       tempObject.position.set(pos[0], pos[1], pos[2]);
       tempObject2.position.set(pos[0], pos[1], pos[2]);
       
-      if (hoveredInstance === i) {
+      if (hoveredInstance === i || selectedSat?.id === data[i].id) {
         tempObject2.scale.setScalar(4);
       } else {
         tempObject2.scale.setScalar(1.0);
@@ -55,6 +56,9 @@ function Satellites({ data, onSelect }: SatellitesProps) {
       
       meshRef2.current.setColorAt(i, new THREE.Color(
         hoveredInstance === i ? "#ffffff" : "#06b6d4"
+      ));
+      meshRef2.current.setColorAt(i, new THREE.Color(
+        selectedSat?.id === data[i].id ? "#ffffff" : "#06b6d4"
       ));
     });
     
@@ -75,7 +79,7 @@ function Satellites({ data, onSelect }: SatellitesProps) {
         args={[undefined, undefined, data.length]}
       >
         <sphereGeometry args={[0.02, 8, 8]} />
-        <meshBasicMaterial color="#06b6d4" />
+        <meshBasicMaterial color="#ffffff" />
       </instancedMesh>
 
       <instancedMesh
@@ -108,32 +112,41 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
   console.log('selectedSat', selectedSat);
 
   return (
-    <div className="h-full w-full bg-black rounded-lg border border-zinc-800 relative flex overflow-hidden">
+    <div className="h-full w-full bg-black rounded-lg border border-zinc-800 relative flex">
       
       <div className="w-full h-full relative">
-        <div className="absolute top-4 left-4 z-10 font-mono pointer-events-none">
-          <h2 className="text-cyan-500 text-[10px] tracking-[0.3em] uppercase opacity-70">Orbital Surveillance</h2>
-          <p className="text-white text-3xl">GLOBAL_MESH</p>
+        <div className="absolute top-0 left-0 z-10 font-mono pointer-events-none p-8">
+          <div className="mb-8">
+            <h2 className="text-xl tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
+              Satellites [{data.length}]
+            </h2>
+            <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest">
+              Scale: 0
+            </p>
+          </div>
         </div>
         
         <Canvas camera={{ position: [0, 0, 25], fov: 45 }}>
           <color attach="background" args={["#000"]} />
           <ambientLight intensity={1} />
           
-          <Sphere args={[5, 64, 64]} onClick={() => setSelectedSat(null)}>
+          <Sphere
+            args={[5, 64, 64]}
+            // onClick={() => setSelectedSat(null)}
+          >
             <meshPhongMaterial color="#050505" emissive="#06b6d4" emissiveIntensity={0.1} wireframe />
           </Sphere>
 
-          <Satellites data={data} onSelect={setSelectedSat} />
+          <Satellites data={data} onSelect={setSelectedSat} selectedSat={selectedSat} />
           <OrbitControls enablePan={false} minDistance={15} maxDistance={40} />
         </Canvas>
       </div>
 
       {selectedSat && (
-        <div className="absolute w-80 h-full right-0 border-l border-zinc-800 bg-zinc-950/80 backdrop-blur-md p-6 animate-in slide-in-from-right duration-300 z-20 overflow-y-auto">
-          <div className="flex justify-between items-start mb-8">
+        <div className="absolute bottom-0 w-80 h-auto right-0 border-l border-t border-zinc-800 backdrop-blur-sm bg-zinc-500/10 p-6 animate-in slide-in-from-right duration-300 z-20 overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
             <h3 className="text-xs font-mono text-cyan-500 uppercase tracking-widest">Satellite Intel</h3>
-            <button onClick={() => setSelectedSat(null)} className="text-zinc-500 hover:text-white text-xl">&times;</button>
+            <button onClick={() => setSelectedSat(null)} className="text-zinc-500 hover:text-white text-xl pb-2">&times;</button>
           </div>
 
           <div className="space-y-8">
@@ -160,23 +173,6 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
                  <span className="text-zinc-500 uppercase">Lat / Long</span>
                  <span className="text-zinc-300">{selectedSat.latitude?.toFixed(4)}° / {selectedSat.longitude?.toFixed(4)}°</span>
                </div>
-               <div className="flex justify-between text-[10px] font-mono">
-                 <span className="text-zinc-500 uppercase">Launch ID</span>
-                 <span className="text-zinc-300 truncate ml-4 italic">{selectedSat.launch}</span>
-               </div>
-               <div className="flex justify-between text-[10px] font-mono">
-                 <span className="text-zinc-500 uppercase">Version</span>
-                 <span className="text-zinc-300">{selectedSat.version}</span>
-               </div>
-            </div>
-
-            <div className="bg-cyan-500/5 border border-cyan-500/20 p-4 rounded">
-              <p className="text-[9px] text-cyan-500 font-bold uppercase mb-2">SpaceTrack Log</p>
-              <p className="text-[10px] text-cyan-200 font-mono leading-relaxed">
-                ID: {selectedSat.spaceTrack.NORAD_CAT_ID} <br/>
-                TYPE: {selectedSat.spaceTrack.OBJECT_TYPE} <br/>
-                STATUS: DEPLOYED_ACTIVE
-              </p>
             </div>
           </div>
         </div>
