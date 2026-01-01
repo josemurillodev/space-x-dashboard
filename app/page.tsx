@@ -5,7 +5,6 @@ import {
   getPayloadStats, 
   getRockets, 
   getLaunchesWithRocketId,
-  getStarlinkPositions,
   getNextLaunch,
   getLatestLaunch
 } from '@/lib/api';
@@ -13,7 +12,7 @@ import { aggregateRocketLaunches } from '@/lib/transformers';
 import RocketsChart from '@/components/rockets-chart';
 import LaunchFocusCard from '@/components/launch-focus-card';
 
-export default async function Dashboard() {
+export default async function DashboardPage() {
   // Parallel Data Fetching
   const [
     launches,
