@@ -112,8 +112,7 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
   console.log('selectedSat', selectedSat);
 
   return (
-    <div className="h-full w-full bg-black rounded-lg border border-zinc-800 relative flex">
-      
+    <div className="h-full w-full rounded-lg border border-zinc-900 relative flex">
       <div className="w-full h-full relative">
         <div className="absolute top-0 left-0 z-10 font-mono pointer-events-none p-8">
           <div className="mb-8">
@@ -121,12 +120,12 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
               Satellites [{data.length}]
             </h2>
             <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest">
-              Scale: 0
+              Global Mesh
             </p>
           </div>
         </div>
         
-        <Canvas camera={{ position: [0, 0, 25], fov: 45 }}>
+        <Canvas camera={{ position: [0, 0, 25], fov: 45 }} className="rounded-lg">
           <color attach="background" args={["#000"]} />
           <ambientLight intensity={1} />
           
