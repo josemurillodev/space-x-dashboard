@@ -1,37 +1,74 @@
-import { LaunchHeatmapItem, PayloadStats, RocketInfo, StarlinkSatellite, QueryResponse, QueryOptions, QueryObject } from '@/types/spacex';
+import {
+  LaunchHeatmapItem,
+  PayloadStats,
+  RocketInfo,
+  StarlinkSatellite,
+  QueryResponse,
+  QueryOptions,
+  QueryObject
+} from '@/types/spacex';
 
 const BASE_URL = 'https://api.spacexdata.com/v4';
 
+export class ApiError extends Error {
+  status: number;
+  endpoint: string;
+
+  constructor(endpoint: string, status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.endpoint = endpoint;
+  }
+}
+
 async function postQuery<T>(
-  endpoint: string, 
-  query: QueryObject = {}, 
+  endpoint: string,
+  query: QueryObject = {},
   options: QueryOptions = {}
 ): Promise<QueryResponse<T>> {
-  
-  const res = await fetch(`${BASE_URL}/${endpoint}/query`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-      query, 
-      options 
-    }),
-    next: { revalidate: 3600 }, 
-  });
+  let res: Response;
+
+  try {
+    res = await fetch(`${BASE_URL}/${endpoint}/query`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, options }),
+      next: { revalidate: 3600 },
+    });
+  } catch {
+    // Network / DNS / timeout
+    throw new ApiError(endpoint, 0, 'Network error while contacting SpaceX API');
+  }
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch ${endpoint}: ${res.status} ${res.statusText}`);
+    const text = await res.text().catch(() => '');
+    throw new ApiError(
+      endpoint,
+      res.status,
+      text || res.statusText || 'SpaceX API error'
+    );
   }
-  
-  return res.json();
+
+  try {
+    return await res.json();
+  } catch {
+    throw new ApiError(endpoint, res.status, 'Invalid JSON response from SpaceX API');
+  }
 }
+
 
 export async function getLaunchHistory(): Promise<LaunchHeatmapItem[]> {
   const body = {
     query: { upcoming: false },
     options: {
-      select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id'],
+      select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id', 'launchpad', 'rocket'],
       pagination: false, // Danger: fetches all (~200+ items). Fine for text data.
-      sort: { date_utc: 'asc' }
+      sort: { date_utc: 'asc' },
+      populate: [
+        { path: 'rocket', select: 'name type' },
+        { path: 'launchpad', select: 'name full_name latitude longitude' }
+      ]
     }
   };
 
@@ -57,7 +94,7 @@ export async function getNextLaunch() {
     query: { upcoming: true },
     options: {
       limit: 1,
-      sort: { date_utc: 'asc' }, // Ascending to get the one closest to today
+      sort: { date_utc: 'asc' },
       select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id']
     }
   };
@@ -84,8 +121,6 @@ export async function getRockets(): Promise<RocketInfo[]> {
 
   const data = await res.json();
 
-  console.log('data', data);
-  
   return data.map((r: RocketInfo) => ({
     id: r.id,
     name: r.name,
@@ -98,9 +133,8 @@ export async function getRockets(): Promise<RocketInfo[]> {
   }));
 }
 
-// Helper to attach rocket IDs to launches
 export async function getLaunchesWithRocketId() {
-   const body = {
+  const body = {
     query: { upcoming: false },
     options: {
       select: ['rocket', 'id'],
@@ -111,19 +145,18 @@ export async function getLaunchesWithRocketId() {
 }
 
 export async function getStarlinkPositions(): Promise<StarlinkSatellite[]> {
-  const body = {
-    query: { 
+  try {
+    const data = await postQuery<StarlinkSatellite>('starlink', {
       latitude: { $ne: null },
       height_km: { $ne: null }
-    },
-    options: {
+    }, {
       select: ['spaceTrack.OBJECT_NAME', 'latitude', 'longitude', 'height_km', 'id'],
-      // limit: 20,
       pagination: false
-    }
-  };
+    });
 
-  const data = await postQuery<StarlinkSatellite>('starlink', body.query, body.options);
-
-  return data.docs;
+    return data.docs;
+  } catch (err) {
+    console.warn('Starlink data unavailable', err);
+    return [];
+  }
 }
