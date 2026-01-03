@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
+import { motion } from "motion/react";
 import { PayloadStats } from "@/types/spacex";
 import { getProcessedPayloads } from "@/lib/payload-utils";
+import { ShuffleTextSimple } from "./shuffle-text";
 
 const REGIME_CONFIG: Record<string, { color: string; distance: number; label: string; stroke: string }> = {
   vleo: { color: "border-blue-400", stroke: "stroke-blue-400", distance: 1, label: "Very Low Earth" },
@@ -26,7 +28,9 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
         Payloads
       </h2>
       <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-8">
-        Orbital Load Distribution
+        <ShuffleTextSimple
+          text="Orbital Load Distribution"
+        />
       </p>
 
       <div className="flex flex-col items-center gap-12">
@@ -35,21 +39,24 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
             <div className="w-8 h-8 bg-cyan-500 rounded-full blur-[2px] opacity-40 animate-pulse" />
           </div>
 
-          {Object.entries(REGIME_CONFIG).map(([key, config]) => {
+          {Object.entries(REGIME_CONFIG).map(([key, config], i) => {
             const scale = 50 + config.distance * 35; // Logic for ring spacing
 
             return (
-              <div
+              <motion.div
                 key={key}
                 className={`absolute rounded-full border transition-all duration-700 ${config.color}`}
                 style={{ width: `${scale}px`, height: `${scale}px`, borderWidth: '0.5px' }}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { delay: i * 0.1 },
+                }}
               >
-                {(
-                  <div className="absolute text-white top-0.5 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-1 text-[9px] font-bold">
-                    {key.toUpperCase()}
-                  </div>
-                )}
-              </div>
+                <div className="absolute text-white top-0.5 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-1 text-[9px] font-bold">
+                  {key.toUpperCase()}
+                </div>
+              </motion.div>
             );
           })}
         </div>
@@ -73,15 +80,20 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
 
           <div className="grid grid-cols-2 gap-4">
             {regimes.slice(0, 4).map((regime, i) => (
-              <div
+              <motion.div
                 key={regime.name}
                 className={`relative pl-3 border-l-2 transition-colors ${REGIME_CONFIG[regime.label]?.color ?? "text-zinc-500"}`}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { delay: i * 0.2 },
+                }}
               >
                 <p className="text-[10px] text-zinc-400 uppercase">
                   {regime.name || "Unknown"}
                 </p>
                 <p className="text-lg text-white">{regime.count}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
