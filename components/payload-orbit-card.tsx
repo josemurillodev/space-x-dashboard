@@ -62,7 +62,14 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
         </div>
 
         <div className="flex-1 w-full space-y-4 font-mono">
-          <div className="flex gap-4">
+          <motion.div
+            className="flex gap-4"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { delay: 0.2 },
+            }}
+          >
             <div className="pb-2">
               <p className="text-zinc-500 text-[10px] uppercase">Payloads</p>
               <p className="text-xl font-bold">{data.length}</p>
@@ -76,7 +83,7 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
                 <span className="text-xs">TONS</span>
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-2 gap-4">
             {regimes.slice(0, 4).map((regime, i) => (
