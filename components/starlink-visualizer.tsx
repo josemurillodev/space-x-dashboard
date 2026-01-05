@@ -4,8 +4,10 @@ import { useRef, useMemo, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sphere, useCursor } from "@react-three/drei";
 import * as THREE from "three";
+import { a, useSpring } from "@react-spring/three";
 import { latLngToVector3 } from "@/lib/coords";
 import { StarlinkSatellite } from "@/types/spacex";
+import { ShuffleTextSimple } from "./shuffle-text";
 
 interface SatellitesProps {
   data: StarlinkSatellite[];
@@ -107,6 +109,34 @@ function Satellites({ data, onSelect, selectedSat }: SatellitesProps) {
   );
 }
 
+function AnimatedSphere() {
+  const { scale } = useSpring({
+    from: { scale: 0 },
+    to: { scale: 1 },
+  });
+
+  return (
+    <a.mesh scale={scale}>
+      <Sphere args={[5, 64, 64]}>
+        <meshPhongMaterial color="#050505" emissive="#06b6d4" emissiveIntensity={0.1} wireframe />
+      </Sphere>
+    </a.mesh>
+  );
+}
+function AnimatedGroup({ children }: { children: React.ReactNode }) {
+  const { scale } = useSpring({
+    delay: 500,
+    from: { scale: 0 },
+    to: { scale: 1 },
+  });
+
+  return (
+    <a.group scale={scale}>
+      {children}
+    </a.group>
+  );
+}
+
 export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[] }) {
   const [selectedSat, setSelectedSat] = useState<StarlinkSatellite | null>(null);
 
@@ -119,23 +149,27 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
               Satellites [{data.length}]
             </h2>
             <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest">
-              Global Mesh
+              <ShuffleTextSimple text="Global Mesh" />
             </p>
           </div>
         </div>
-        
-        <Canvas camera={{ position: [0, 0, 25], fov: 45 }} className="rounded-lg">
+
+        <Canvas
+          camera={{ position: [0, 0, 25], fov: 45 }}
+          className="rounded-lg"
+        >
           <color attach="background" args={["#000"]} />
           <ambientLight intensity={1} />
-          
-          <Sphere
-            args={[5, 64, 64]}
-            // onClick={() => setSelectedSat(null)}
-          >
-            <meshPhongMaterial color="#050505" emissive="#06b6d4" emissiveIntensity={0.1} wireframe />
-          </Sphere>
 
-          <Satellites data={data} onSelect={setSelectedSat} selectedSat={selectedSat} />
+          <AnimatedSphere />
+
+          <AnimatedGroup>
+            <Satellites
+              data={data}
+              onSelect={setSelectedSat}
+              selectedSat={selectedSat}
+            />
+          </AnimatedGroup>
           <OrbitControls enablePan={false} minDistance={15} maxDistance={40} />
         </Canvas>
       </div>
@@ -143,13 +177,22 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
       {selectedSat && (
         <div className="absolute bottom-0 w-80 h-auto right-0 border-l border-t border-zinc-800 backdrop-blur-sm bg-zinc-500/10 p-6 animate-in slide-in-from-right duration-300 z-20 overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xs font-mono text-cyan-500 uppercase tracking-widest">Satellite Intel</h3>
-            <button onClick={() => setSelectedSat(null)} className="text-zinc-500 hover:text-white text-xl pb-2">&times;</button>
+            <h3 className="text-xs font-mono text-cyan-500 uppercase tracking-widest">
+              Satellite Intel
+            </h3>
+            <button
+              onClick={() => setSelectedSat(null)}
+              className="text-zinc-500 hover:text-white text-xl pb-2"
+            >
+              &times;
+            </button>
           </div>
 
           <div className="space-y-8">
             <div>
-              <p className="text-[10px] text-zinc-500 uppercase font-mono mb-1">Object Name</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-mono mb-1">
+                Object Name
+              </p>
               <p className="text-2xl font-bold text-white tracking-tighter uppercase leading-none">
                 {selectedSat.spaceTrack.OBJECT_NAME}
               </p>
@@ -157,20 +200,32 @@ export default function StarlinkVisualizer({ data }: { data: StarlinkSatellite[]
 
             <div className="grid grid-cols-2 gap-4">
               <div className="border-l border-cyan-500/30 pl-3 py-1">
-                <p className="text-[9px] text-zinc-500 uppercase font-mono">Altitude</p>
-                <p className="text-lg text-cyan-400 font-mono font-bold">{selectedSat.height_km?.toFixed(1)} <span className="text-[10px]">KM</span></p>
+                <p className="text-[9px] text-zinc-500 uppercase font-mono">
+                  Altitude
+                </p>
+                <p className="text-lg text-cyan-400 font-mono font-bold">
+                  {selectedSat.height_km?.toFixed(1)}{" "}
+                  <span className="text-[10px]">KM</span>
+                </p>
               </div>
               <div className="border-l border-cyan-500/30 pl-3 py-1">
-                <p className="text-[9px] text-zinc-500 uppercase font-mono">Velocity</p>
-                <p className="text-lg text-zinc-200 font-mono">7.6 <span className="text-[10px]">KM/S</span></p>
+                <p className="text-[9px] text-zinc-500 uppercase font-mono">
+                  Velocity
+                </p>
+                <p className="text-lg text-zinc-200 font-mono">
+                  7.6 <span className="text-[10px]">KM/S</span>
+                </p>
               </div>
             </div>
 
             <div className="space-y-3 pt-4 border-t border-zinc-900">
-               <div className="flex justify-between text-[10px] font-mono">
-                 <span className="text-zinc-500 uppercase">Lat / Long</span>
-                 <span className="text-zinc-300">{selectedSat.latitude?.toFixed(4)}° / {selectedSat.longitude?.toFixed(4)}°</span>
-               </div>
+              <div className="flex justify-between text-[10px] font-mono">
+                <span className="text-zinc-500 uppercase">Lat / Long</span>
+                <span className="text-zinc-300">
+                  {selectedSat.latitude?.toFixed(4)}° /{" "}
+                  {selectedSat.longitude?.toFixed(4)}°
+                </span>
+              </div>
             </div>
           </div>
         </div>
