@@ -1,4 +1,3 @@
-import LaunchYearGrid from '@/components/launch-year-grid';
 import PayloadOrbitCard from '@/components/payload-orbit-card';
 import { 
   getLaunchHistory, 
@@ -11,6 +10,7 @@ import {
 import { aggregateRocketLaunches } from '@/lib/transformers';
 import RocketsChart from '@/components/rockets-chart';
 import LaunchFocusCard from '@/components/launch-focus-card';
+import LaunchYearCard from '@/components/launch-year-card';
 
 // TODO: add launches/payloads table, rocket/launch info, add animations, add empty states
 
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
   return (
     <main className="p-2 gap-2 grid grid-cols-1 md:grid-cols-2">
       <LaunchFocusCard latest={latestLaunch} next={nextLaunch} />
-      <LaunchYearGrid data={launches} />
+      <LaunchYearCard data={launches} />
       <RocketsChart data={rocketData} />
       <PayloadOrbitCard data={payloads} />
     </main>

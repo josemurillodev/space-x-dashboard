@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { motion } from "motion/react";
 import { PayloadStats } from "@/types/spacex";
 import { getProcessedPayloads } from "@/lib/payload-utils";
-import { ShuffleTextSimple } from "./shuffle-text";
+import Title from "./title";
 
 const REGIME_CONFIG: Record<string, { color: string; distance: number; label: string; stroke: string }> = {
   vleo: { color: "border-blue-400", stroke: "stroke-blue-400", distance: 1, label: "Very Low Earth" },
@@ -24,14 +24,11 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
 
   return (
     <div className="bg-black p-8 rounded-xl border border-zinc-900 relative overflow-hidden group">
-      <h2 className="text-xl font-mono tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
-        Payloads
-      </h2>
-      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-8">
-        <ShuffleTextSimple
-          text="Orbital Load Distribution"
-        />
-      </p>
+      <Title
+        className="mb-8"
+        title="Payloads"
+        subtitle="Orbital Load Distribution"
+      />
 
       <div className="flex flex-col items-center gap-12">
         <div className="relative w-65 h-65 flex justify-center items-center aspect-square max-w-75 mx-auto">
@@ -40,7 +37,7 @@ export default function PayloadOrbitCard({ data }: { data: PayloadStats[] }) {
           </div>
 
           {Object.entries(REGIME_CONFIG).map(([key, config], i) => {
-            const scale = 50 + config.distance * 35; // Logic for ring spacing
+            const scale = 50 + config.distance * 35;
 
             return (
               <motion.div

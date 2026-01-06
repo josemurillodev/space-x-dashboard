@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { RocketInfo } from "@/types/spacex";
-import { ShuffleTextSimple } from "./shuffle-text";
+import Title from "./title";
 
 const ROCKETS_COLORS = [
   { text: "text-cyan-400", border: "border-cyan-400" },
@@ -21,15 +21,12 @@ export default function RocketsChartCard({
 
   return (
     <div className="flex flex-col bg-black p-8 rounded-xl border border-zinc-900 relative overflow-hidden group">
-      <h2 className="text-xl font-mono tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
-        Rockets
-      </h2>
       {/* TODO: add stats */}
-      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-4">
-        <ShuffleTextSimple
-          text="Success: 181 | Failure: 6"
-        />
-      </p>
+      <Title
+        className="mb-4"
+        title="Rockets"
+        subtitle="Success: 181 | Failure: 6"
+      />
 
       <div className="flex flex-col flex-1 justify-around items-center">
         {data.map(({ name, count, success_rate_pct, mass }, i) => {

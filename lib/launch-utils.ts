@@ -1,6 +1,6 @@
-import { LaunchHeatmapItem } from "@/types/spacex";
+import { LaunchItem } from "@/types/spacex";
 
-export function getLaunchStatsByYear(launches: LaunchHeatmapItem[]) {
+export function getLaunchStatsByYear(launches: LaunchItem[]) {
   const counts: Record<number, number> = {};
   
   launches.forEach(l => {

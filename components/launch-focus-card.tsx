@@ -1,23 +1,23 @@
 "use client";
 
 import { motion } from "motion/react";
-import { LaunchHeatmapItem } from "@/types/spacex";
+import { LaunchItem } from "@/types/spacex";
 import { ShuffleTextSimple } from "./shuffle-text";
+import Title from "./title";
 
 interface FocusProps {
-  latest: LaunchHeatmapItem;
-  next: LaunchHeatmapItem;
+  latest: LaunchItem;
+  next: LaunchItem;
 }
 
 export default function LaunchFocusCard({ latest, next }: FocusProps) {
   return (
     <div className="bg-black p-8 flex flex-col rounded-xl border border-zinc-900 relative overflow-hidden group">
-      <h2 className="text-xl font-mono tracking-widest text-zinc-400 uppercase mb-4 border-l-4 border-cyan-500 pl-4">
-        News
-      </h2>
-      <p className="text-zinc-500 text-xs mt-1 uppercase tracking-widest mb-8">
-        <ShuffleTextSimple text="On the Launchpad" />
-      </p>
+      <Title
+        className="mb-8"
+        title="News"
+        subtitle="On the Launchpad"
+      />
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 border border-zinc-800">
         {/* LATEST */}
         <div className="relative flex flex-col justify-between p-8 border-b md:border-b-0 md:border-r border-zinc-800 group overflow-hidden">

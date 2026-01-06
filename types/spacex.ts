@@ -1,4 +1,4 @@
-export interface LaunchHeatmapItem {
+export interface LaunchItem {
   id: string;
   date_utc: string;
   success: boolean | null;
@@ -6,6 +6,8 @@ export interface LaunchHeatmapItem {
   name: string;
   flight_number: number;
   details: string | null;
+  launchpad: { id: string; name: string; full_name: string; latitude: number; longitude: number; } | null;
+  rocket: { id: string; name: string; type: string } | null;
 }
 
 export interface PayloadStats {

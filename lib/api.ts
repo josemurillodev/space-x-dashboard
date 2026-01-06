@@ -1,5 +1,5 @@
 import {
-  LaunchHeatmapItem,
+  LaunchItem,
   PayloadStats,
   RocketInfo,
   StarlinkSatellite,
@@ -58,7 +58,7 @@ async function postQuery<T>(
 }
 
 
-export async function getLaunchHistory(): Promise<LaunchHeatmapItem[]> {
+export async function getLaunchHistory(): Promise<LaunchItem[]> {
   const body = {
     query: { upcoming: false },
     options: {
@@ -72,7 +72,7 @@ export async function getLaunchHistory(): Promise<LaunchHeatmapItem[]> {
     }
   };
 
-  const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
+  const data = await postQuery<LaunchItem>('launches', body.query, body.options);
   return data.docs;
 }
 
@@ -85,7 +85,7 @@ export async function getLatestLaunch() {
       select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id']
     }
   };
-  const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
+  const data = await postQuery<LaunchItem>('launches', body.query, body.options);
   return data.docs[0];
 }
 
@@ -98,7 +98,7 @@ export async function getNextLaunch() {
       select: ['name', 'flight_number', 'date_utc', 'success', 'details', 'id']
     }
   };
-  const data = await postQuery<LaunchHeatmapItem>('launches', body.query, body.options);
+  const data = await postQuery<LaunchItem>('launches', body.query, body.options);
   return data.docs[0];
 }
 
